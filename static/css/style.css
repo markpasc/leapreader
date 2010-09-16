@@ -1,0 +1,158 @@
+html {
+    min-height: 100%;
+}
+
+body {
+    font-size: 1em;
+    line-height: 1.5em;
+    min-height: 100%;
+}
+
+h1 {
+    line-height: 1.5em;
+}
+
+.pkg:after {
+    content: " ";
+    display: block;
+    visibility: hidden;
+    clear: both;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+}
+.pkg { display: inline-block; }
+
+#content {
+    width: 700px;
+    margin: 0 auto;
+}
+
+body {
+    background: #278ca8;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#278ca8), to(#114e64));
+    background-image: -moz-linear-gradient(left, right, from(#278ca8), to(#114e64));
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#278ca8, endColorstr=#114e64, GradientType=0);
+}
+
+.post {
+    position: relative;
+    background: white;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.post .post-why {
+    background: #fffb95;
+    padding: 10px 20px;
+    border-radius: 5px 5px 0 0;
+
+    font-size: 0.8em;
+}
+
+.post .post-why p {
+    margin: 0;
+    padding: 0;
+}
+
+.post .post-why img {
+    vertical-align: middle;
+}
+
+.post .post-body {
+    padding: 20px;
+}
+
+.post .post-title {
+    margin: 0;
+}
+
+.post .post-title a:link,
+.post .post-title a:hover,
+.post .post-title a:visited,
+.post .post-title a:focus,
+.post .post-title a:active {
+    color: inherit;
+    text-decoration: none;
+}
+.post .post-title a:hover,
+.post .post-title a:focus,
+.post .post-title a:active {
+    text-decoration: underline;
+}
+
+.post img.post-poster {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+
+    position: absolute;
+    left: -40px;
+}
+
+.post .post-content {
+    position: relative;
+}
+
+.post .post-footer {
+    font-size: 0.8em;
+    color: #999;
+}
+
+.post .post-why a:link,
+.post .post-why a:hover,
+.post .post-why a:visited,
+.post .post-why a:focus,
+.post .post-why a:active,
+.post .post-footer a:link,
+.post .post-footer a:hover,
+.post .post-footer a:visited,
+.post .post-footer a:focus,
+.post .post-footer a:active {
+    color: inherit;
+}
+
+
+/* post content styles */
+
+.post-content blockquote, .post-content div.highlight {
+    margin: 10px 40px;
+}
+.post-content blockquote {
+    font-size: 0.9em;
+    line-height: 1.5em;
+}
+.post-content blockquote+p small {
+    margin-left: 40px;
+    font-style: oblique;
+    color: #666;
+}
+
+.post-content small {
+    font-size: 0.9em;
+    line-height: 1.5em;
+}
+
+.post .post-content img {
+    max-width: 660px;
+}
+
+.post-content blockquote:before, .post-content div.highlight:before,
+.post-content blockquote:after, .post-content div.highlight:after {
+    display: inline-block;
+    position: absolute;
+    font-size: 5em;
+    font-weight: bold;
+    color: #eee;
+}
+.post-content blockquote:before, .post-content div.highlight:before {
+    left: -5px;
+    content: "“";
+    margin: 20px 0 0 0;
+}
+.post-content blockquote:after, .post-content div.highlight:after {
+    right: 0;
+    content: "”";
+    margin-top: -20px;
+}
+
