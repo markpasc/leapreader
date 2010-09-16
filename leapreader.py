@@ -100,7 +100,11 @@ def read(request, profilename):
         while True:
             yield random.gauss(0, 3)
 
-    return render('read.html', {'posts': posts, 'rot': rot()})
+    return render('read.html', {
+        'profilename': profilename,
+        'posts': posts,
+        'rot': rot(),
+    })
 
 
 if __name__ == '__main__':
