@@ -34,7 +34,8 @@ def index(request):
 def identify_user(request):
     user = request.GET.get('user')
     if user:
-        raise itty.Redirect('/' + user)
+        userobj = t.users.get(user)
+        raise itty.Redirect('/' + userobj.preferred_username)
     raise itty.Redirect('http://www.typepad.com/services/signin?to=http://leapf.org/')
 
 
