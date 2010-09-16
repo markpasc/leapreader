@@ -57,16 +57,20 @@ def good_notes_for_notes(notes):
                 if obj.source.by_user:
                     continue
 
+            if getattr(obj, 'reblog_of', None) is not None:
+                note.original = obj
+                note.object = t.assets.get(obj.reblog_of.url_id)
+                note.verb = 'Reblog'
+            elif getattr(obj, 'in_reply_to', None) is not None:
+                note.original = obj
+                note.object = t.assets.get(obj.in_reply_to.url_id)
+                note.verb = 'Comment'
+
             okay_types = ['Post']
             if obj.container and obj.container.object_type == 'Group':
                 okay_types.extend(['Photo', 'Audio', 'Video', 'Link'])
             if obj.object_type not in okay_types:
                 continue
-
-            if getattr(obj, 'reblog_of', None) is not None:
-                note.original = obj
-                note.object = t.assets.get(obj.reblog_of.url_id)
-                note.verb = 'Reblog'
 
         # Yay, let's show this one!
         yield note
@@ -91,14 +95,14 @@ def objs_for_notes(notes):
 
         if note.verb == 'NewAsset':
             objdata['new_asset'] = True
-            objdata['actions'] = ()
             objdata['when'] = note.published
-        elif not objdata.get('new_asset'):
+        else:
             objdata['actions'].append(note)
 
     for objdata in sorted(interesting.values(), key=lambda d: d['when'], reverse=True):
         obj = objdata['object']
         obj.actions = objdata['actions']
+        obj.new_asset_action = bool(objdata.get('new_asset'))
         yield obj
 
 

@@ -55,10 +55,6 @@ body {
     padding: 0;
 }
 
-.post .post-why img {
-    vertical-align: middle;
-}
-
 .post .post-body {
     padding: 20px;
 }
@@ -112,9 +108,11 @@ body {
     color: inherit;
 }
 
+.post .post-footer img,
 .post .post-why img {
     width: 20px;
     height: auto;
+    vertical-align: middle;
 }
 
 
