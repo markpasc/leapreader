@@ -135,6 +135,7 @@ def read(request, profilename):
         'profilename': profilename,
         'posts': posts,
         'rot': random_rotation(),
+        'ganalytics_code': settings.get('ganalytics_code'),
     })
 
 
