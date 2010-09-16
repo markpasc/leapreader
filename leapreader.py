@@ -19,6 +19,11 @@ def render(templatename, data):
     return t.render(**data)
 
 
+def random_rotation():
+    while True:
+        yield random.gauss(0, 3)
+
+
 @get('/static/(?P<filename>.+)')
 def static(request, filename):
     return itty.serve_static_file(request, filename, root=join(dirname(__file__), 'static'))
@@ -26,8 +31,15 @@ def static(request, filename):
 
 @get('/')
 def index(request):
-    raise itty.Redirect('http://www.typepad.com/services/api-redirect-identify?consumer_key=%s&nonce=7'
-        % settings['consumer_key'])
+    if 'consumer_key' in settings:
+        raise itty.Redirect('http://www.typepad.com/services/api-redirect-identify?consumer_key=%s&nonce=7'
+            % settings['consumer_key'])
+
+    try:
+        profilename = request.GET['name']
+    except KeyError:
+        return render('index.html', {'rot': random_rotation()})
+    raise itty.Redirect('/' + profilename)
 
 
 @get('/.services/tp-session')
@@ -116,14 +128,10 @@ def read(request, profilename):
 
     posts = (obj for obj in objs_for_notes(good_notes_for_notes(notes.entries + more_notes.entries)))
 
-    def rot():
-        while True:
-            yield random.gauss(0, 3)
-
     return render('read.html', {
         'profilename': profilename,
         'posts': posts,
-        'rot': rot(),
+        'rot': random_rotation(),
     })
 
 

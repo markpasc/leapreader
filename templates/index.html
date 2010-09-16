@@ -1,5 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>hi</h1>
+
+    <div class="post">
+        <div class="post-body">
+            <img
+                class="post-poster"
+                src="http://up3.typepad.com/6a00d83451c82369e20120a4e574c1970b-50si"
+                style="-webkit-transform: rotate({{ rot.next() }}deg); -moz-transform: rotate({{ rot.next() }}deg); transform: rotate({{ rot.next() }}deg)"
+                >
+
+            <h1>Your TypePad neighborhood</h1>
+
+            <form method="GET">
+                <p>
+                    Where is your TypePad profile?<br>
+                    <samp>http://profile.typepad.com/</samp><input name="name"> <input type="submit" value="Here!">
+                </p>
+            </form>
+        </div>
+    </div>
+
 {% endblock %}
