@@ -71,20 +71,7 @@
                     by
                     <a href="{{ post.author.profile_page_url }}">{{ post.author.display_name or post.author.preferred_username }}</a>
                     <span class="separator">&middot;</span>
-                    <a href="{{ post.permalink_url }}#feedback">{{ post.favorite_count }} favorites</a>
-                    {% for note in post.actions %}
-                        {% if note.verb == 'AddedFavorite' %}
-                        <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
-                            {% if note.actor.avatar_link.url_template %}
-                                src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
-                            {% else %}
-                                src="{{ note.actor.avatar_link.url }}"
-                            {% endif %}
-                            ></a>
-                        {% endif %}
-                    {% endfor %}
-                    <span class="separator">&middot;</span>
-                    <a href="{{ post.permalink_url }}#comments">{{ post.comment_count }} comments</a>
+                    <a href="{{ post.permalink_url }}#comments">{% if post.comment_count == 0 %}Leave a comment{% else %}{{ post.comment_count }} comment{% if post.comment_count > 1 %}s{% endif %}{% endif %}</a>
                     {% for note in post.actions %}
                         {% if note.verb == 'Comment' %}
                         <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
@@ -96,9 +83,24 @@
                             ></a>
                         {% endif %}
                     {% endfor %}
+                    {% if post.favorite_count %}
+                        <span class="separator">&middot;</span>
+                        <a href="{{ post.permalink_url }}#feedback">{{ post.favorite_count }} favorite{% if post.favorite_count > 1 %}s{% endif %}</a>
+                        {% for note in post.actions %}
+                            {% if note.verb == 'AddedFavorite' %}
+                            <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
+                                {% if note.actor.avatar_link.url_template %}
+                                    src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
+                                {% else %}
+                                    src="{{ note.actor.avatar_link.url }}"
+                                {% endif %}
+                                ></a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                     {% if post.reblog_count %}
                         <span class="separator">&middot;</span>
-                        <a href="{{ post.permalink_url }}#feedback">{{ post.reblog_count }} reblogs</a>
+                        <a href="{{ post.permalink_url }}#feedback">{{ post.reblog_count }} reblog{% if post.reblog_count > 1 %}s{% endif %}</a>
                         {% for note in post.actions %}
                             {% if note.verb == 'Reblog' %}
                             <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
