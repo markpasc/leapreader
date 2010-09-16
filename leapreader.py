@@ -73,12 +73,12 @@ def good_notes_for_notes(notes):
 
             if getattr(obj, 'reblog_of', None) is not None:
                 note.original = obj
-                note.object = t.assets.get(obj.reblog_of.url_id)
                 note.verb = 'Reblog'
-            elif getattr(obj, 'in_reply_to', None) is not None:
+                obj = note.object = t.assets.get(obj.reblog_of.url_id)
+            elif getattr(obj, 'root', None) is not None:
                 note.original = obj
-                note.object = t.assets.get(obj.in_reply_to.url_id)
                 note.verb = 'Comment'
+                obj = note.object = t.assets.get(obj.root.url_id)
 
             okay_types = ['Post']
             if obj.container and obj.container.object_type == 'Group':

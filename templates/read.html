@@ -22,6 +22,8 @@
                                 added this as a favorite
                             {% elif note.verb == "Reblog" %}
                                 <a href="{{ note.original.permalink_url }}">reblogged</a> this
+                            {% elif note.verb == "Comment" %}
+                                left <a href="{{ note.original.permalink_url }}">a comment</a> on this
                             {% else %}
                                 generated a <samp>{{ note.verb }}</samp> event for this
                             {% endif %}
