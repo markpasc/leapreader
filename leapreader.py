@@ -26,7 +26,7 @@ def static(request, filename):
 
 @get('/')
 def index(request):
-    return Redirect('http://www.typepad.com/services/api-redirect-identify?consumer_key=%s&nonce=7'
+    return itty.Redirect('http://www.typepad.com/services/api-redirect-identify?consumer_key=%s&nonce=7'
         % settings['consumer_key'])
 
 
