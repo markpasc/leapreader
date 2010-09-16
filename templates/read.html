@@ -6,9 +6,9 @@
 
     {% for post in posts %}
         <div id="post-{{ post.url_id }}" class="post">
-            {% if post.actions and not post.new_asset_action %}
+            {% if post.why %}
                 <div class="post-why">
-                    {% for note in post.actions %}
+                    {% for note in [post.why] %}
                         <p>
                             <a href="{{ note.actor.profile_page_url }}"><img
                                 {% if note.actor.avatar_link.url_template %}
@@ -59,6 +59,8 @@
                             src="{{ post.image_link.url }}"
                         {% endif %}
                         >
+                    {% elif post.video_link %}
+                    {{ post.video_link.embed_code }}
                     {% endif %}
 
                     {{ post.rendered_content or post.content or '' }}
@@ -68,52 +70,46 @@
                     <a href="{{ post.permalink_url }}" class="relativedatestamp" title="{{ post.published.strftime("%a %b %d %H:%M:%S +0000 %Y") }} GMT">{{ post.published.strftime("%d %b %Y %H:%M") }}</a>
                     by
                     <a href="{{ post.author.profile_page_url }}">{{ post.author.display_name or post.author.preferred_username }}</a>
-                    &middot;
+                    <span class="separator">&middot;</span>
                     <a href="{{ post.permalink_url }}#feedback">{{ post.favorite_count }} favorites</a>
-                    {% if post.actions and post.new_asset_action %}
-                        {% for note in post.actions %}
-                            {% if note.verb == 'AddedFavorite' %}
-                            <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
-                                {% if note.actor.avatar_link.url_template %}
-                                    src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
-                                {% else %}
-                                    src="{{ note.actor.avatar_link.url }}"
-                                {% endif %}
-                                ></a>
+                    {% for note in post.actions %}
+                        {% if note.verb == 'AddedFavorite' %}
+                        <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
+                            {% if note.actor.avatar_link.url_template %}
+                                src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
+                            {% else %}
+                                src="{{ note.actor.avatar_link.url }}"
                             {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    &middot;
-                    <a href="{{ post.permalink_url }}#comments">{{ post.comment_count }} comments</a>
-                    {% if post.actions and post.new_asset_action %}
-                        {% for note in post.actions %}
-                            {% if note.verb == 'Comment' %}
-                            <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
-                                {% if note.actor.avatar_link.url_template %}
-                                    src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
-                                {% else %}
-                                    src="{{ note.actor.avatar_link.url }}"
-                                {% endif %}
-                                ></a>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if post.reblog_count %}
-                        &middot;
-                        <a href="{{ post.permalink_url }}#feedback">{{ post.reblog_count }} reblogs</a>
-                        {% if post.actions and post.new_asset_action %}
-                            {% for note in post.actions %}
-                                {% if note.verb == 'Reblog' %}
-                                <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
-                                    {% if note.actor.avatar_link.url_template %}
-                                        src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
-                                    {% else %}
-                                        src="{{ note.actor.avatar_link.url }}"
-                                    {% endif %}
-                                    ></a>
-                                {% endif %}
-                            {% endfor %}
+                            ></a>
                         {% endif %}
+                    {% endfor %}
+                    <span class="separator">&middot;</span>
+                    <a href="{{ post.permalink_url }}#comments">{{ post.comment_count }} comments</a>
+                    {% for note in post.actions %}
+                        {% if note.verb == 'Comment' %}
+                        <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
+                            {% if note.actor.avatar_link.url_template %}
+                                src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
+                            {% else %}
+                                src="{{ note.actor.avatar_link.url }}"
+                            {% endif %}
+                            ></a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if post.reblog_count %}
+                        <span class="separator">&middot;</span>
+                        <a href="{{ post.permalink_url }}#feedback">{{ post.reblog_count }} reblogs</a>
+                        {% for note in post.actions %}
+                            {% if note.verb == 'Reblog' %}
+                            <a href="{{ note.actor.profile_page_url }}" title="{{ note.actor.display_name or note.actor.preferred_username }}"><img
+                                {% if note.actor.avatar_link.url_template %}
+                                    src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
+                                {% else %}
+                                    src="{{ note.actor.avatar_link.url }}"
+                                {% endif %}
+                                ></a>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </div>
             </div>

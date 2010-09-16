@@ -118,6 +118,12 @@ body {
     vertical-align: middle;
 }
 
+.separator {
+    display: inline-block;
+    visibility: hidden;
+    width: 2em;
+}
+
 
 /* post content styles */
 

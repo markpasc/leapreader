@@ -116,7 +116,8 @@ def objs_for_notes(notes):
     for objdata in sorted(interesting.values(), key=lambda d: d['when'], reverse=True):
         obj = objdata['object']
         obj.actions = objdata['actions']
-        obj.new_asset_action = bool(objdata.get('new_asset'))
+        if not objdata.get('new_asset'):
+            obj.why = obj.actions[0]
         yield obj
 
 
