@@ -145,6 +145,9 @@ body {
     font-size: 0.9em;
     line-height: 1.5em;
 }
+.post-footer small {
+    font-size: 0.8em;
+}
 
 .post .post-content img {
     max-width: 660px;

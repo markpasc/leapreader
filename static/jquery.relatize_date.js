@@ -40,9 +40,9 @@
           case 'b': return $r.shortMonths[month]; break;
           case 'B': return $r.months[month]; break;
           case 'c': return date.toString(); break;
-          case 'd': return pad(date.getDate()); break;
+          case 'd': return date.getDate(); break;
           case 'H': return pad(hours); break;
-          case 'I': return pad((hours + 12) % 12); break;
+          case 'I': return ((hours + 12) % 12).toString(10); break;
           case 'm': return pad(month + 1); break;
           case 'M': return pad(minutes); break;
           case 'p': return hours > 12 ? 'PM' : 'AM'; break;
@@ -70,20 +70,20 @@
       if (delta < 60) {
           return 'less than a minute ago';
       } else if (delta < 120) {
-          return 'about a minute ago';
+          return 'a minute ago';
       } else if (delta < (45*60)) {
           return (parseInt(delta / 60)).toString() + ' minutes ago';
       } else if (delta < (120*60)) {
-          return 'about an hour ago';
+          return 'an hour ago';
       } else if (delta < (24*60*60)) {
-          return 'about ' + (parseInt(delta / 3600)).toString() + ' hours ago';
+          return (parseInt(delta / 3600)).toString() + ' hours ago';
       } else if (delta < (48*60*60)) {
           return '1 day ago';
       } else {
         var days = (parseInt(delta / 86400)).toString();
         if (days > 5) {
-          var fmt  = '%B %d, %Y'
-          if (includeTime) fmt += ' %I:%M %p'
+          var fmt  = '%d %b %Y'
+          if (includeTime) fmt += ' %I:%M <small>%p</small>'
           return $r.strftime(fromTime, fmt);
         } else {
           return days + " days ago"

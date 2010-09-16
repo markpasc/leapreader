@@ -121,11 +121,11 @@
     </div>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    <script type="text/javascript" src="http://markpasc.typepad.com/files/jquery.relatize_date.js"></script>
+    <script type="text/javascript" src="/static/jquery.relatize_date.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('.relativedatestamp').each(function (i, val) {
-                $(val).text($.relatizeDate.timeAgoInWords(new Date($(val).attr('title')), true));
+                $(val).html($.relatizeDate.timeAgoInWords(new Date($(val).attr('title')), true));
             });
         });
     </script>
