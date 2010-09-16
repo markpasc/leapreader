@@ -38,7 +38,10 @@ def index(request):
     try:
         profilename = request.GET['name']
     except KeyError:
-        return render('index.html', {'rot': random_rotation()})
+        return render('index.html', {
+            'rot': random_rotation(),
+            'ganalytics_code': settings.get('ganalytics_code'),
+        })
     raise itty.Redirect('/' + profilename)
 
 
