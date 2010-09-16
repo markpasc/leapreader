@@ -83,7 +83,7 @@ body {
 
 .post img.post-poster {
     width: 50px;
-    height: 50px;
+    height: auto;
     border-radius: 5px;
 
     position: absolute;
@@ -110,6 +110,11 @@ body {
 .post .post-footer a:focus,
 .post .post-footer a:active {
     color: inherit;
+}
+
+.post .post-why img {
+    width: 20px;
+    height: auto;
 }
 
 

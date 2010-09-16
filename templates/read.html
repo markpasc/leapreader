@@ -8,7 +8,13 @@
                 <div class="post-why">
                     {% for note in post.actions %}
                         <p>
-                            <a href="{{ note.actor.profile_page_url }}"><img src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}" width="20" height="20"></a>
+                            <a href="{{ note.actor.profile_page_url }}"><img
+                                {% if note.actor.avatar_link.url_template %}
+                                    src="{{ note.actor.avatar_link.url_template|replace("{spec}", "20si") }}"
+                                {% else %}
+                                    src="{{ note.actor.avatar_link.url }}"
+                                {% endif %}
+                                ></a>
                             <a href="{{ note.actor.profile_page_url }}">{{ note.actor.display_name }}</a>
                             {% if note.verb == "AddedFavorite" %}
                                 added this as a favorite
@@ -26,7 +32,11 @@
             <div class="post-body">
                 <a href="{{ post.author.profile_page_url }}"><img
                     class="post-poster"
-                    src="{{ post.author.avatar_link.url_template|replace("{spec}","50si") }}"
+                    {% if post.author.avatar_link.url_template %}
+                        src="{{ post.author.avatar_link.url_template|replace("{spec}","50si") }}"
+                    {% else %}
+                        src="{{ post.author.avatar_link.url }}"
+                    {% endif %}
                     style="-webkit-transform: rotate({{ rot.next() }}deg); -moz-transform: rotate({{ rot.next() }}deg); transform: rotate({{ rot.next() }}deg)"
                     ></a>
 
