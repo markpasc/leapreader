@@ -39,6 +39,7 @@ body {
     position: relative;
     background: white;
     border-radius: 5px;
+    -moz-border-radius: 5px;
     margin: 20px 0;
 }
 
@@ -46,6 +47,7 @@ body {
     background: #fffb95;
     padding: 10px 20px;
     border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
 
     font-size: 0.8em;
 }
@@ -81,6 +83,7 @@ body {
     width: 50px;
     height: auto;
     border-radius: 5px;
+    -moz-border-radius: 5px;
 
     position: absolute;
     left: -40px;

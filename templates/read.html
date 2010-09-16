@@ -25,7 +25,7 @@
                             {% else %}
                                 generated a <samp>{{ note.verb }}</samp> event for this
                             {% endif %}
-                            <span title="{{ note.published }} GMT" class="relativedatestamp">{{ note.published.strftime("%d %b %Y %H:%M") }}</span>
+                            <span title="{{ note.published.strftime("%a %b %d %H:%M:%S +0000 %Y") }}" class="relativedatestamp">{{ note.published.strftime("%d %b %Y %H:%M") }}</span>
                         </p>
                     {% endfor %}
                 </div>
@@ -55,7 +55,7 @@
                 {% endif %}
 
                 <div class="post-footer">
-                    <a href="{{ post.permalink_url }}" class="relativedatestamp" title="{{ post.published }} GMT">{{ post.published.strftime("%d %b %Y %H:%M") }}</a>
+                    <a href="{{ post.permalink_url }}" class="relativedatestamp" title="{{ post.published.strftime("%a %b %d %H:%M:%S +0000 %Y") }} GMT">{{ post.published.strftime("%d %b %Y %H:%M") }}</a>
                     by
                     <a href="{{ post.author.profile_page_url }}">{{ post.author.display_name or post.author.preferred_username }}</a>
                     &middot;
