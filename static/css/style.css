@@ -116,6 +116,7 @@ body {
     width: 20px;
     height: auto;
     vertical-align: middle;
+    border-radius: 3px;
 }
 
 .separator {
