@@ -26,7 +26,7 @@ def static(request, filename):
 
 @get('/')
 def index(request):
-    return itty.Redirect('http://www.typepad.com/services/api-redirect-identify?consumer_key=%s&nonce=7'
+    raise itty.Redirect('http://www.typepad.com/services/api-redirect-identify?consumer_key=%s&nonce=7'
         % settings['consumer_key'])
 
 
@@ -34,8 +34,8 @@ def index(request):
 def identify_user(request):
     user = request.GET.get('user')
     if user:
-        return itty.Redirect('/' + user)
-    return itty.Redirect('http://www.typepad.com/services/signin?to=http://leapf.org/')
+        raise itty.Redirect('/' + user)
+    raise itty.Redirect('http://www.typepad.com/services/signin?to=http://leapf.org/')
 
 
 def good_notes_for_notes(notes):
