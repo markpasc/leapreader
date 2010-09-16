@@ -149,6 +149,9 @@ body {
 .post .post-content img {
     max-width: 660px;
 }
+.post .post-content blockquote img, .post .post-content div.highlight img {
+    max-width: 580px;
+}
 
 .post-content blockquote:before, .post-content div.highlight:before,
 .post-content blockquote:after, .post-content div.highlight:after {
