@@ -11,6 +11,8 @@ env = Environment(loader=FileSystemLoader(join(dirname(__file__), 'templates')))
 
 t = typd.TypePad(endpoint='http://api.typepad.com/')
 
+settings = {}
+
 
 def render(templatename, data):
     t = env.get_template(templatename)
@@ -24,7 +26,16 @@ def static(request, filename):
 
 @get('/')
 def index(request):
-    return render('index.html', {})
+    return Redirect('http://www.typepad.com/services/api-redirect-identify?consumer_key=%s&nonce=7'
+        % settings['consumer_key'])
+
+
+@get('/.services/tp-session')
+def identify_user(request):
+    user = request.GET.get('user')
+    if user:
+        return itty.Redirect('/' + user)
+    return itty.Redirect('http://www.typepad.com/services/signin?to=http://leapf.org/')
 
 
 def good_notes_for_notes(notes):
@@ -108,4 +119,8 @@ def read(request, profilename):
 
 
 if __name__ == '__main__':
+    try:
+        execfile(join(dirname(__file__), 'settings.py'), settings)
+    except IOError:
+        pass
     run_itty(host='0.0.0.0')
