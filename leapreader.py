@@ -88,12 +88,16 @@ def objs_for_notes(notes):
             }
             interesting[obj.url_id] = objdata
 
-        objdata['actions'].append(note)
+        if note.verb == 'NewAsset':
+            objdata['new_asset'] = True
+            objdata['actions'] = ()
+            objdata['when'] = note.published
+        elif not objdata.get('new_asset'):
+            objdata['actions'].append(note)
 
     for objdata in sorted(interesting.values(), key=lambda d: d['when'], reverse=True):
         obj = objdata['object']
-        if not [act for act in objdata['actions'] if act.verb == 'NewAsset']:
-            obj.actions = [act for act in objdata['actions'] if act.verb != 'NewAsset']
+        obj.actions = objdata['actions']
         yield obj
 
 
