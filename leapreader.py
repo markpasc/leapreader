@@ -16,6 +16,29 @@ t = typd.TypePad(endpoint='http://api.typepad.com/')
 cache = dict()
 
 
+def configure():
+    if 'memcached_servers' in settings:
+        getdef = object()
+        class Cache(object):
+            def __init__(self, cache):
+                self.cache = cache
+            def __getitem__(self, key):
+                return self.cache.get(key)
+            def __setitem__(self, key, value):
+                return self.cache.set(key, value)
+            def get(self, key, default=getdef):
+                ret = self.cache.get(key)
+                if ret is not None:
+                    return ret
+                if default is not getdef:
+                    return default
+                return None
+
+        import memcache
+        global cache
+        cache = Cache(memcache.Client(settings['memcached_servers'], debug=10))
+
+
 def render(templatename, data):
     t = env.get_template(templatename)
     return t.render(**data)
@@ -177,4 +200,5 @@ if __name__ == '__main__':
         execfile(join(dirname(__file__), 'settings.py'), settings)
     except IOError:
         pass
+    configure()
     run_itty(host='0.0.0.0')
