@@ -49,6 +49,11 @@ def random_rotation():
         yield random.gauss(0, 3)
 
 
+@get('/favicon.ico')
+def favicon(request):
+    raise itty.Redirect('http://www.typepad.com/favicon.ico')
+
+
 @get('/static/(?P<filename>.+)')
 def static(request, filename):
     return itty.serve_static_file(request, filename, root=join(dirname(__file__), 'static'))
