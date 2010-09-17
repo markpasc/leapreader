@@ -139,7 +139,7 @@ def good_notes_for_notes(notes):
         yield note
 
 
-def objs_for_notes(followers, notes):
+def objs_for_notes(notes, followers=None, profilename=None):
     interesting = dict()
 
     for note in notes:
@@ -170,7 +170,9 @@ def objs_for_notes(followers, notes):
             # someone we follow, don't show the asset. The NewAsset event just
             # passed out of the window. (Since we already went through all the
             # notes, the followers list is up to date.)
-            if obj.author.url_id in followers:
+            if followers is not None and obj.author.url_id in followers:
+                continue
+            if profilename is not None and obj.author.preferred_username == profilename:
                 continue
             obj.why = obj.actions[0]
         yield obj
@@ -184,7 +186,7 @@ def activity(request, profilename):
     except typd.NotFound:
         raise itty.NotFound('No such profilename %r' % profilename)
 
-    posts = (obj for obj in objs_for_notes({}, good_notes_for_notes(notes.entries)))
+    posts = (obj for obj in objs_for_notes(good_notes_for_notes(notes.entries)))
 
     return render('activity.html', {
         'profilename': profilename,
@@ -202,7 +204,7 @@ def read(request, profilename):
 
     noteiter = add_followers(profilename, notes.entries + more_notes.entries)
     followers = noteiter.next()
-    posts = (obj for obj in objs_for_notes(followers, good_notes_for_notes(noteiter)))
+    posts = (obj for obj in objs_for_notes(good_notes_for_notes(noteiter), followers, profilename))
 
     return render('read.html', {
         'profilename': profilename,
