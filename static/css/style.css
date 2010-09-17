@@ -52,6 +52,22 @@ body {
     font-size: 0.8em;
 }
 
+@media only screen and (max-device-width: 480px) {
+    #content {
+        padding-left: 40px;
+    }
+
+    .post {
+        border-radius: 15px;
+        -moz-border-radius: 15px;
+    }
+
+    .post .post-why {
+        border-radius: 15px 15px 0 0;
+        -moz-border-radius: 15px 15px 0 0;
+    }
+}
+
 .post .post-why p {
     margin: 0;
     padding: 0;
@@ -176,3 +192,6 @@ body {
     margin-top: -20px;
 }
 
+.post .post-content pre {
+    white-space: pre-wrap;
+}
