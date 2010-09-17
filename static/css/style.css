@@ -69,6 +69,7 @@ body.activity {
 }
 
 .post .post-title {
+    font-weight: normal;
     margin: 0;
 }
 
