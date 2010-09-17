@@ -1,0 +1,6 @@
+itty
+httplib2
+Jinja2
+simplejson
+remoteobjects
+-e git+http://git.dev.sixapart.com/~mpaschal/typd.git#egg=typd
