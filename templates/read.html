@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="post-footer">
-                    <a href="{{ post.permalink_url }}" class="relativedatestamp" title="{{ post.published.strftime("%a %b %d %H:%M:%S +0000 %Y") }} GMT">{{ post.published.strftime("%d %b %Y %H:%M") }}</a>
+                    <a href="{{ post.permalink_url }}" class="relativedatestamp" title="{{ post.published.strftime("%a %b %d %H:%M:%S +0000 %Y") }}">{{ post.published.strftime("%d %b %Y %H:%M") }}</a>
                     by
                     <a href="{{ post.author.profile_page_url }}">{{ post.author.display_name or post.author.preferred_username }}</a>
                     <span class="separator">&middot;</span>
