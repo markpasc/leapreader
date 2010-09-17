@@ -140,6 +140,7 @@ def read(request, profilename, activity):
     posts = (obj for obj in objs_for_notes(good_notes_for_notes(all_notes)))
 
     return render('read.html', {
+        'activity_view': bool(activity),
         'profilename': profilename,
         'posts': posts,
         'rot': random_rotation(),

@@ -35,6 +35,13 @@ body {
     filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#278ca8, endColorstr=#114e64, GradientType=0);
 }
 
+body.activity {
+    background: #6e9487;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#6e9487), to(#425A52));
+    background-image: -moz-linear-gradient(left, right, from(#6e9487), to(#425A52));
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#6e9487, endColorstr=#425A52, GradientType=0);
+}
+
 .post {
     position: relative;
     background: white;
