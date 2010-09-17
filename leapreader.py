@@ -41,7 +41,9 @@ def configure():
 
 def render(templatename, data):
     t = env.get_template(templatename)
-    return t.render(**data)
+    return t.render(rot=random_rotation(),
+        ganalytics_code=settings.get('ganalytics_code'),
+        **data)
 
 
 def random_rotation():
@@ -174,29 +176,37 @@ def objs_for_notes(followers, notes):
         yield obj
 
 
-@get('/(?P<profilename>[^/]+)(?P<activity>/activity)?')
-def read(request, profilename, activity):
+@get('/(?P<profilename>[^/]+)/activity')
+def activity(request, profilename):
     try:
-        if activity:
-            notes = t.users.get_events(profilename, limit=50)
-            all_notes = notes.entries
-        else:
-            notes = t.users.get_notifications(profilename, offset=1, limit=50)
-            more_notes = t.users.get_notifications(profilename, offset=51, limit=50)
-            all_notes = notes.entries + more_notes.entries
+        notes = t.users.get_events(profilename, limit=50)
+        all_notes = notes.entries
     except typd.NotFound:
         raise itty.NotFound('No such profilename %r' % profilename)
 
-    noteiter = add_followers(profilename, all_notes)
+    posts = (obj for obj in objs_for_notes({}, good_notes_for_notes(notes.entries)))
+
+    return render('activity.html', {
+        'profilename': profilename,
+        'posts': posts,
+    })
+
+
+@get('/(?P<profilename>[^/]+)')
+def read(request, profilename):
+    try:
+        notes = t.users.get_notifications(profilename, offset=1, limit=50)
+        more_notes = t.users.get_notifications(profilename, offset=51, limit=50)
+    except typd.NotFound:
+        raise itty.NotFound('No such profilename %r' % profilename)
+
+    noteiter = add_followers(profilename, notes.entries + more_notes.entries)
     followers = noteiter.next()
     posts = (obj for obj in objs_for_notes(followers, good_notes_for_notes(noteiter)))
 
     return render('read.html', {
-        'activity_view': bool(activity),
         'profilename': profilename,
         'posts': posts,
-        'rot': random_rotation(),
-        'ganalytics_code': settings.get('ganalytics_code'),
     })
 
 
