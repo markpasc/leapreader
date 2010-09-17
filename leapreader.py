@@ -9,9 +9,11 @@ import typd
 
 env = Environment(loader=FileSystemLoader(join(dirname(__file__), 'templates')))
 
+settings = {}
+
 t = typd.TypePad(endpoint='http://api.typepad.com/')
 
-settings = {}
+cache = dict()
 
 
 def render(templatename, data):
@@ -54,6 +56,20 @@ def identify_user(request):
     raise itty.Redirect('http://www.typepad.com/services/signin?to=http://leapf.org/')
 
 
+def add_followers(profilename, notes):
+    cachekey = '%s:follow' % profilename
+    followers = set(cache.get(cachekey, ()))
+
+    # Yield the followers first so we can consult it later.
+    yield followers
+
+    for note in notes:
+        followers.add(note.actor.url_id)
+        yield note
+
+    cache[cachekey] = tuple(followers)
+
+
 def good_notes_for_notes(notes):
     for note in notes:
         # TODO: skip notes when paging
@@ -93,7 +109,7 @@ def good_notes_for_notes(notes):
         yield note
 
 
-def objs_for_notes(notes):
+def objs_for_notes(followers, notes):
     interesting = dict()
 
     for note in notes:
@@ -120,6 +136,12 @@ def objs_for_notes(notes):
         obj = objdata['object']
         obj.actions = objdata['actions']
         if not objdata.get('new_asset'):
+            # If we don't have a NewAsset event but we know the asset is by
+            # someone we follow, don't show the asset. The NewAsset event just
+            # passed out of the window. (Since we already went through all the
+            # notes, the followers list is up to date.)
+            if obj.author.url_id in followers:
+                continue
             obj.why = obj.actions[0]
         yield obj
 
@@ -137,7 +159,9 @@ def read(request, profilename, activity):
     except typd.NotFound:
         raise itty.NotFound('No such profilename %r' % profilename)
 
-    posts = (obj for obj in objs_for_notes(good_notes_for_notes(all_notes)))
+    noteiter = add_followers(profilename, all_notes)
+    followers = noteiter.next()
+    posts = (obj for obj in objs_for_notes(followers, good_notes_for_notes(noteiter)))
 
     return render('read.html', {
         'activity_view': bool(activity),
