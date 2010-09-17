@@ -124,15 +124,20 @@ def objs_for_notes(notes):
         yield obj
 
 
-@get('/(?P<profilename>[^/]+)')
-def read(request, profilename):
+@get('/(?P<profilename>[^/]+)(?P<activity>/activity)?')
+def read(request, profilename, activity):
     try:
-        notes = t.users.get_notifications(profilename, offset=1, limit=50)
-        more_notes = t.users.get_notifications(profilename, offset=51, limit=50)
+        if activity:
+            notes = t.users.get_events(profilename, limit=50)
+            all_notes = notes.entries
+        else:
+            notes = t.users.get_notifications(profilename, offset=1, limit=50)
+            more_notes = t.users.get_notifications(profilename, offset=51, limit=50)
+            all_notes = notes.entries + more_notes.entries
     except typd.NotFound:
         raise itty.NotFound('No such profilename %r' % profilename)
 
-    posts = (obj for obj in objs_for_notes(good_notes_for_notes(notes.entries + more_notes.entries)))
+    posts = (obj for obj in objs_for_notes(good_notes_for_notes(all_notes)))
 
     return render('read.html', {
         'profilename': profilename,
