@@ -18,7 +18,6 @@ cache = dict()
 
 def configure():
     if 'memcached_servers' in settings:
-        getdef = object()
         class Cache(object):
             def __init__(self, cache):
                 self.cache = cache
@@ -26,13 +25,11 @@ def configure():
                 return self.cache.get(key)
             def __setitem__(self, key, value):
                 return self.cache.set(key, value)
-            def get(self, key, default=getdef):
+            def get(self, key, default=None):
                 ret = self.cache.get(key)
                 if ret is not None:
                     return ret
-                if default is not getdef:
-                    return default
-                return None
+                return default
 
         import memcache
         global cache
