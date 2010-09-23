@@ -101,6 +101,7 @@ body {
     width: 50px;
     height: auto;
 
+    background: white;
     border: 5px solid white;
     border-width: 5px 5px 10px 5px;
     -webkit-box-shadow: 0px 0px 4px #666;
