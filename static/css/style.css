@@ -100,11 +100,15 @@ body {
 .post img.post-poster {
     width: 50px;
     height: auto;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
+
+    border: 5px solid white;
+    border-width: 5px 5px 15px 5px;
+    -webkit-box-shadow: 0px 0px 4px #666;
+    -moz-box-shadow: 0px 0px 4px #666;
+    box-shadow: 0px 0px 4px #666;
 
     position: absolute;
-    left: -40px;
+    left: -50px;
 }
 
 .post .post-content {
@@ -134,7 +138,12 @@ body {
     width: 20px;
     height: auto;
     vertical-align: middle;
-    border-radius: 3px;
+
+    border: 2px solid white;
+    border-width: 2px 2px 6px 2px;
+    -webkit-box-shadow: 0px 0px 2px #000;
+    -moz-box-shadow: 0px 0px 2px #000;
+    box-shadow: 0px 0px 2px #000;
 }
 
 .separator {
