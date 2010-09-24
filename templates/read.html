@@ -34,14 +34,15 @@
             {% endif %}
 
             <div class="post-body">
-                <a href="{{ post.author.profile_page_url }}"><img
-                    class="post-poster"
+                {% set poster_rot = rot.next() %}
+                <a class="post-poster" href="{{ post.author.profile_page_url }}"
+                    style="-webkit-transform: rotate({{ poster_rot }}deg); -moz-transform: rotate({{ poster_rot }}deg); transform: rotate({{ poster_rot }}deg)"
+                    ><span></span><img
                     {% if post.author.avatar_link.url_template %}
                         src="{{ post.author.avatar_link.url_template|replace("{spec}","50si") }}"
                     {% else %}
                         src="{{ post.author.avatar_link.url }}"
                     {% endif %}
-                    style="-webkit-transform: rotate({{ rot.next() }}deg); -moz-transform: rotate({{ rot.next() }}deg); transform: rotate({{ rot.next() }}deg)"
                     ></a>
 
                 {% if post.title %}
