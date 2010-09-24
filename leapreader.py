@@ -101,33 +101,38 @@ def good_notes_for_notes(notes):
         if note.verb in ('AddedNeighbor', 'SharedBlog', 'JoinedGroup'):
             continue
 
+        obj = note.object
+
+        if obj is None:  # deleted asset
+            continue
+        if obj.permalink_url is None:  # no ancillary
+            continue
+        if obj.source is not None:  # no boomerang
+            if obj.source.by_user:
+                continue
+        if obj.container is not None and obj.container.url_id == '6p0120a5e990ac970c':
+            continue
+
         if note.verb == 'NewAsset':
-            obj = note.object
-
-            if obj is None:  # deleted asset
-                continue
-            if obj.permalink_url is None:  # no ancillary
-                continue
-            if obj.source is not None:  # no boomerang
-                if obj.source.by_user:
-                    continue
-            if obj.container is not None and obj.container.url_id == '6p0120a5e990ac970c':
-                continue
-
-            if getattr(obj, 'reblog_of', None) is not None:
-                note.original = obj
-                note.verb = 'Reblog'
-                obj = note.object = t.assets.get(obj.reblog_of.url_id)
-            elif getattr(obj, 'root', None) is not None:
+            if getattr(obj, 'root', None) is not None:
                 note.original = obj
                 note.verb = 'Comment'
                 obj = note.object = t.assets.get(obj.root.url_id)
 
+            if getattr(obj, 'reblog_of', None) is not None:
+                note.original = obj
+                note.verb = 'Reblog'
+
+        if note.verb == 'NewAsset':
             okay_types = ['Post']
             if obj.container and obj.container.object_type == 'Group':
                 okay_types.extend(['Photo', 'Audio', 'Video', 'Link'])
             if obj.object_type not in okay_types:
                 continue
+
+        # Move all reactions up to the root object of reblogging.
+        while getattr(obj, 'reblog_of', None) is not None:
+            obj = note.object = t.assets.get(obj.reblog_of.url_id)
 
         # Yay, let's show this one!
         yield note
