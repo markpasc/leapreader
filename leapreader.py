@@ -162,6 +162,8 @@ def objs_for_notes(notes, followers=None, profilename=None):
                 objdata['SKIP'] = True
 
             objdata['new_asset'] = True
+
+            # If there was a NewAsset event, pin the post to that time, not the oldest event.
             objdata['when'] = note.published
         else:
             objdata['actions'].append(note)
