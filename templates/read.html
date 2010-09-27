@@ -120,7 +120,12 @@
     {% endfor %}
 
     <div class="more">
-        <p>More?</p>
+        {% if page > 1 %}
+            <p><a href="/{{ profilename }}/page/{{ page - 1 }}">Newer</a></p>
+        {% endif %}
+        {% if page < 5 %}
+            <p><a href="/{{ profilename }}/page/{{ page + 1 }}">Older</a></p>
+        {% endif %}
     </div>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>

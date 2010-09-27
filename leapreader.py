@@ -201,11 +201,13 @@ def activity(request, profilename):
     })
 
 
-@get('/(?P<profilename>[^/]+)')
-def read(request, profilename):
+@get('/(?P<profilename>[^/]+)(?:/page/(?P<page>\d+))?')
+def read(request, profilename, page):
+    page = int(page) if page else 1
+    offset = (page - 1) * 100
     try:
-        notes = t.users.get_notifications(profilename, offset=1, limit=50)
-        more_notes = t.users.get_notifications(profilename, offset=51, limit=50)
+        notes = t.users.get_notifications(profilename, offset=1 + offset, limit=50)
+        more_notes = t.users.get_notifications(profilename, offset=51 + offset, limit=50)
     except typd.NotFound:
         raise itty.NotFound('No such profilename %r' % profilename)
 
@@ -216,6 +218,7 @@ def read(request, profilename):
     return render('read.html', {
         'profilename': profilename,
         'posts': posts,
+        'page': page,
     })
 
 
