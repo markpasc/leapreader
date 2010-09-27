@@ -1,3 +1,4 @@
+from datetime import timedelta
 from os.path import join, dirname
 import random
 
@@ -156,12 +157,19 @@ def objs_for_notes(notes, followers=None, profilename=None):
             interesting[obj.url_id] = objdata
 
         if note.verb == 'NewAsset':
+            # Skip the whole object if the post was backdated (the asset's publish time is out of line with the event time).
+            if abs(note.published - obj.published) > timedelta(days=1):
+                objdata['SKIP'] = True
+
             objdata['new_asset'] = True
             objdata['when'] = note.published
         else:
             objdata['actions'].append(note)
 
     for objdata in sorted(interesting.values(), key=lambda d: d['when'], reverse=True):
+        if objdata.get('SKIP'):
+            continue
+
         obj = objdata['object']
         obj.actions = objdata['actions']
         if not objdata.get('new_asset'):
