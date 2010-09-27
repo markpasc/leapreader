@@ -31,10 +31,22 @@ def configure():
                 if ret is not None:
                     return ret
                 return default
+            def get_multi(self, keys, key_prefix=''):
+                return self.cache.get_multi(keys, key_prefix=key_prefix)
+            def set_multi(self, data, key_prefix=''):
+                return self.cache.set_multi(data, key_prefix=key_prefix)
 
         import memcache
         global cache
         cache = Cache(memcache.Client(settings['memcached_servers'], debug=10))
+    else:
+        class Cache(dict):
+            def get_multi(self, keys, key_prefix=''):
+                return dict((k, self[key_prefix + str(k)]) for k in keys if key_prefix + str(k) in self)
+            def set_multi(self, data, key_prefix=''):
+                self.update((key_prefix + str(k), v) for k, v in data.items())
+
+        cache = Cache()
 
 
 def render(templatename, data):
@@ -155,6 +167,9 @@ def objs_for_notes(notes, followers=None, profilename=None):
                 #'action_times': ...?
             }
             interesting[obj.url_id] = objdata
+        else:
+            # Date the object by its oldest (last) event.
+            objdata['when'] = note.published
 
         if note.verb == 'NewAsset':
             # Skip the whole object if the post was backdated (the asset's publish time is out of line with the event time).
@@ -162,11 +177,21 @@ def objs_for_notes(notes, followers=None, profilename=None):
                 objdata['SKIP'] = True
 
             objdata['new_asset'] = True
-
-            # If there was a NewAsset event, pin the post to that time, not the oldest event.
-            objdata['when'] = note.published
         else:
             objdata['actions'].append(note)
+
+    # Only consider objects that are not known to have been pinned to other times already.
+    key_prefix = 'whenevent:%s:' % profilename
+    whentimes = cache.get_multi(interesting.keys(), key_prefix=key_prefix)
+    for url_id in list(interesting.keys()):
+        eventwhen = interesting[url_id]['when']
+        if url_id not in whentimes:
+            whentimes[url_id] = eventwhen
+        elif whentimes[url_id] > eventwhen:
+            whentimes[url_id] = eventwhen
+        elif whentimes[url_id] < eventwhen:
+            interesting[url_id]['SKIP'] = True
+    cache.set_multi(whentimes, key_prefix=key_prefix)
 
     for objdata in sorted(interesting.values(), key=lambda d: d['when'], reverse=True):
         if objdata.get('SKIP'):
@@ -183,7 +208,7 @@ def objs_for_notes(notes, followers=None, profilename=None):
                 continue
             if profilename is not None and obj.author.preferred_username == profilename:
                 continue
-            obj.why = obj.actions[0]
+            obj.why = obj.actions[-1]
         yield obj
 
 
