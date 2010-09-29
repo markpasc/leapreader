@@ -123,7 +123,7 @@ def good_notes_for_notes(notes):
         if obj.source is not None:  # no boomerang
             if obj.source.by_user:
                 continue
-        if obj.container is not None and obj.container.url_id == '6p0120a5e990ac970c':
+        if obj.container is not None and obj.container.url_id in ('6p0120a5e990ac970c', '6a013487865036970c0134878650f2970c'):
             continue
 
         if note.verb == 'NewAsset':
