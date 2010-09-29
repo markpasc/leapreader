@@ -119,6 +119,7 @@
         </div>
     {% endfor %}
 
+    {% block pagination %}
     <div class="more">
         {% if page > 1 %}
             <p><a href="/{{ profilename }}/page/{{ page - 1 }}">Newer</a></p>
@@ -127,6 +128,7 @@
             <p><a href="/{{ profilename }}/page/{{ page + 1 }}">Older</a></p>
         {% endif %}
     </div>
+    {% endblock %}
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript" src="/static/jquery.relatize_date.js"></script>
