@@ -7,10 +7,10 @@
         <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
         <link rel="stylesheet" type="text/css" href="/static/css/text.css">
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
-        {% if extrastyle %}
-        <link rel="stylesheet" type="text/css" href="{{ extrastyle }}">
-        {% else %}
+        {% if extrastyle is none or extrastyle == '' %}
         <link rel="stylesheet" type="text/css" href="/static/css/extrastyle.css">
+        {% elif extrastyle %}
+        <link rel="stylesheet" type="text/css" href="{{ extrastyle }}">
         {% endif %}
     {% endblock %}
 </head><body>

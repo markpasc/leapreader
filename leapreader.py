@@ -50,17 +50,17 @@ def configure():
         cache = Cache()
 
 
-def render(request, templatename, data):
-    extrastyle = None
-    try:
-        cookieheader = request._environ['HTTP_COOKIE']
-    except KeyError:
-        pass
-    else:
-        c = SimpleCookie()
-        c.load(cookieheader)
-        if 'style' in c:
-            extrastyle = c['style'].value
+def render(request, templatename, data, extrastyle=None):
+    if extrastyle is None:
+        try:
+            cookieheader = request._environ['HTTP_COOKIE']
+        except KeyError:
+            pass
+        else:
+            c = SimpleCookie()
+            c.load(cookieheader)
+            if 'style' in c:
+                extrastyle = c['style'].value
 
     t = env.get_template(templatename)
     return t.render(rot=random_rotation(),
@@ -227,7 +227,7 @@ def objs_for_notes(notes, followers=None, profilename=None):
 
 @get('/.customize')
 def customize(request):
-    return render(request, 'customize.html', {})
+    return render(request, 'customize.html', {}, extrastyle=False)
 
 
 @post('/.customize')
