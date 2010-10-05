@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% block htmltitle %}Customize the reader{% endblock %}
+
+{% block content_inner %}
+
+    <h1>Customize your reader</h1>
+
+    <form method="POST">
+        <p>
+            Where is your replacement stylesheet?<br>
+            <input type="url" name="url" style="width: 40em"> <input type="submit" value="Here!">
+        </p>
+    </form>
+
+{% endblock %}
+

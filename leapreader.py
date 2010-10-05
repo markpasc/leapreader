@@ -1,7 +1,9 @@
+from Cookie import SimpleCookie
+from datetime import datetime, timedelta
 from os.path import join, dirname
 import random
 
-from itty import get, run_itty
+from itty import get, post, run_itty
 import itty
 from jinja2 import Environment, FileSystemLoader
 import typd
@@ -36,10 +38,22 @@ def configure():
         cache = Cache(memcache.Client(settings['memcached_servers'], debug=10))
 
 
-def render(templatename, data):
+def render(request, templatename, data):
+    extrastyle = None
+    try:
+        cookieheader = request._environ['HTTP_COOKIE']
+    except KeyError:
+        pass
+    else:
+        c = SimpleCookie()
+        c.load(cookieheader)
+        if 'style' in c:
+            extrastyle = c['style'].value
+
     t = env.get_template(templatename)
     return t.render(rot=random_rotation(),
         ganalytics_code=settings.get('ganalytics_code'),
+        extrastyle=extrastyle,
         **data)
 
 
@@ -67,7 +81,7 @@ def index(request):
     try:
         profilename = request.GET['name']
     except KeyError:
-        return render('index.html', {})
+        return render(request, 'index.html', {})
     raise itty.Redirect('/' + profilename)
 
 
@@ -172,6 +186,28 @@ def objs_for_notes(notes, followers=None, profilename=None):
         yield obj
 
 
+@get('/.customize')
+def customize(request):
+    return render(request, 'customize.html', {})
+
+
+@post('/.customize')
+def customize(request):
+    # Set a cookie?
+    c = SimpleCookie()
+    c['style'] = request.POST.get('url', '')
+    expires = datetime.now() + timedelta(weeks=520)
+    c['style']['expires'] = expires.strftime("%a, %d-%b-%Y %H:%M:%S PST")
+    cookieheaders = c.output()
+
+    headers = [
+        ('Location', '/'),
+    ]
+    headers.extend(header.split(':', 1) for header in cookieheaders.split('\n'))
+
+    return itty.Response('/', status=302, headers=headers)
+
+
 @get('/(?P<profilename>[^/]+)/activity')
 def activity(request, profilename):
     try:
@@ -182,7 +218,7 @@ def activity(request, profilename):
 
     posts = (obj for obj in objs_for_notes(good_notes_for_notes(notes.entries)))
 
-    return render('activity.html', {
+    return render(request, 'activity.html', {
         'profilename': profilename,
         'posts': posts,
     })
@@ -200,7 +236,7 @@ def read(request, profilename):
     followers = noteiter.next()
     posts = (obj for obj in objs_for_notes(good_notes_for_notes(noteiter), followers, profilename))
 
-    return render('read.html', {
+    return render(request, 'read.html', {
         'profilename': profilename,
         'posts': posts,
     })

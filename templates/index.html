@@ -12,6 +12,7 @@
                 style="-webkit-transform: rotate({{ rot.next() }}deg); -moz-transform: rotate({{ rot.next() }}deg); transform: rotate({{ rot.next() }}deg)"
                 >
 
+            {% block content_inner %}
             <h1>Your TypePad neighborhood</h1>
 
             <form method="GET">
@@ -20,6 +21,7 @@
                     <samp>http://profile.typepad.com/</samp><input name="name"> <input type="submit" value="Here!">
                 </p>
             </form>
+            {% endblock %}
         </div>
     </div>
 
